@@ -41,3 +41,15 @@ def cleanFile(string):
 
   #Ensure it returns the cleaned value as needed
   return (cleanfiles.capitalize().title())
+
+
+for i in directories_in_curdir:
+   print i
+   temp = cleanFile(i)
+   print temp
+   #If changes in filenames, rename 
+   if(i != temp):
+       shutil.move(i, cleanFile(i))
+   else:
+      print "skipped"
+      print "==="
