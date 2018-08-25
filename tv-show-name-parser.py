@@ -17,9 +17,8 @@ for a in files:
     
     # Check for name of the episode, if yes, add it to the filename
     try:
-      extension = re.split(r'-', match[-1])
-      extension = " -" + extension[1]
-      print extension
+      extension = re.split(r' - ', match[-1])
+      extension = " - " + extension[1]
 
     # No episode name, continue with the filename  
     except:
