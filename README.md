@@ -4,7 +4,7 @@ Installation:
 
 0. Install Python2.x
 1. Copy the python file, and update the directory where we want to process the filenames.
-2. Run - python parser.py
+2. Run - ```python movie-name-parser.py``` to clean movie titles / ```python tv-show-name-parser.py``` for tv-shows
 
 ## Movie name parser
 
