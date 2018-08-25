@@ -14,9 +14,17 @@ for a in files:
 
     episodeNumber = re.findall(r'\d+', match[2])
     episodeNumber = episodeNumber[0]
+    
+    # Check for name of the episode, if yes, add it to the filename
+    try:
+      extension = re.split(r'-', match[-1])
+      extension = " -" + extension[1]
+      print extension
 
-    extension = re.findall(r'\.\w+', match[-1])
-    extension = extension[0]
+    # No episode name, continue with the filename  
+    except:
+      extension = re.findall(r'\.\w+', match[-1])
+      extension = extension[0]
 
     ans =  (match[0] + '- s' + seasonNumber + 'e' + episodeNumber + extension)
     shutil.move(a, ans)
