@@ -2,8 +2,8 @@
 import re
 import os
 import shutil
-from os import walk
-files = os.listdir(".")
+
+files = os.listdir("/path/to/tv-shows/directory")
 
 for a in files:
   try:
