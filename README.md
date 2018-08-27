@@ -32,3 +32,7 @@ Follows the requirements as per [Plex naming scheme](https://support.plex.tv/art
          Grey's Anatomy - s02e02.mkv
          Grey's Anatomy - s02e03.m4v
 ```
+
+## Changelog
+
+Check [Changelog.md](https://github.com/shreyasgaonkar/Plex-filename-parser/blob/master/CHANGELOG.md)
