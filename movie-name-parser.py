@@ -44,9 +44,9 @@ def cleanFile(string):
 
     # Check for any roman chars
     temp = (cleanfiles.split(" "))
-    for i in temp:
-        if(i in roman):
-            i = i.upper()
+    for i, s in enumerate(temp):
+        if(s.lower() in roman):
+            temp[i] = s.upper()
     cleanfiles = " ".join(temp)
 
     # Ensure it returns the cleaned value as needed
