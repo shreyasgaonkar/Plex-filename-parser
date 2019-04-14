@@ -14,6 +14,7 @@ def cleanFile(string):
   cleanfiles = []
   #Clean the file formats
   blacklist = ['1080p', '1080', 'blu ray', "bluray", "blu-ray", "4k", "720p", "720", "dvdrip", "dvd", "brrip", "h264", "h265", "mp4"]
+  roman = ['i', 'ii', 'iii', 'iv', 'iiii', 'v', 'vi', 'vii', 'viii', 'ix', 'x']  
 
   #Clean the dots here
   def cleanDots(filename):
@@ -39,17 +40,26 @@ def cleanFile(string):
       temp = re.split(i, cleanfiles)
       cleanfiles = temp[0]
 
+  #Check for any roman chars
+  temp = (cleanfiles.split(" "))
+  for i in temp:
+    if(i in roman):
+      i=i.upper()
+  cleanfiles = " ".join(temp)
+  print(cleanfiles)
+
   #Ensure it returns the cleaned value as needed
   return (cleanfiles.capitalize().title())
 
 
 for i in directories_in_curdir:
    print i
-   temp = cleanFile(i)
-   print temp
+   cleanFile(i)
+   print(cleanFile(i))
    #If changes in filenames, rename 
    if(i != temp):
-       shutil.move(i, cleanFile(i))
+       print("Dry Run")
+       #shutil.move(i, cleanFile(i))
    else:
       print "skipped"
       print "==="
