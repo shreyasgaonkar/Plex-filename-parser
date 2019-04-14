@@ -58,8 +58,12 @@ for i in directories_in_curdir:
     cleanFile(i)
     print("New filename: {}".format(cleanFile(i)))
     # If changes in filenames, rename
-    if(i != cleanFile(i)):
-        shutil.move(i, cleanFile(i))
+    try:
+        if(i != cleanFile(i)):
+            shutil.move(i, cleanFile(i))
+    # If the filename exists, skip
+    except:
+        pass
     else:
         print("skipped")
         print("===")
