@@ -4,10 +4,10 @@ While trying to clean my plex movie database, I was tired of changing the naming
 
 Installation:
 
-0. Install Python2.x
+0. Install Python3.x
 1. Copy the python file, and update the directory where we want to process the filenames.
-2. Edit file location ```os.chdir('/path/to/movies/directory')``` to parse the files.
-3. Run - ```python movie_name_parser.py``` to clean movie titles / ```python tv_show_name_parser.py``` for tv-shows
+2. Edit file location ```os.chdir('/path/to/movies/directory')``` or ```TARGET_DIR = '/path/to/movies/directory'``` to parse the files.
+3. Run - ```python movie_name_parser.py``` to clean Movie titles & ```python tv_show_name_parser.py``` for TV Shows
 
 ## Movie name parser
 
@@ -35,6 +35,35 @@ Follows the requirements as per [Plex naming scheme](https://support.plex.tv/art
          Grey's Anatomy - s02e02.mkv
          Grey's Anatomy - s02e03.m4v
 ```
+
+[movie_name_parser.py](movie_name_parser.py)
+### Directory structure before:
+```
+$ tree .
+.
+├── avatar.2019
+│   ├── VeNom\ [2018].mp4
+│   ├── avatar-2019.mkv
+│   └── avatar.2019.srt
+├── harry\ potter\ and\ the\ half\ blood\ prince\ dvdrip\ 2006
+│   └── harry\ potter\ and\ the\ half\ blood\ prince\ 2006.mkv
+└── rise.of.the.planet.of.the.apes.iii.2015
+    └── rise.of.the.planet.of.the.apes.iii.2015.mp4
+```
+### Directory structure after running the script:
+```
+$ tree .
+.
+├── Avatar\ (2019)
+│   ├── Avatar\ (2019).mkv
+│   ├── Avatar\ (2019).srt
+│   └── Venom\ (2018).mp4
+├── Harry\ Potter\ And\ The\ Half\ Blood\ Prince
+│   └── Harry\ Potter\ And\ The\ Half\ Blood\ Prince\ (2006).mkv
+└── Rise\ Of\ The\ Planet\ Of\ The\ Apes\ III\ (2015)
+    └── Rise\ Of\ The\ Planet\ Of\ The\ Apes\ III\ (2015).mp4
+```
+
 
 ## Changelog
 
