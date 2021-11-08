@@ -1,15 +1,21 @@
 # Plex filename parser using Python
 
-While trying to clean my plex movie database, I was tired of changing the naming schemes to match Plex's. I wrote this simple script in Python to clean (most) of my databases which typically would take me hours of my weekend time to sit and manually update it. In few cases (duplicate file names), I still have to manually intervene once a while, but that is far less work as before.
+While trying to clean my Plex media database, I was tired of changing the naming schemes to match [Plex's standards](https://support.plex.tv/articles/naming-and-organizing-your-tv-show-files/). I wrote this simple script in Python to clean (most) of my databases which typically would take me hours of my weekend time to sit and manually update it. In few cases (duplicate file names), I still have to manually intervene once a while, but that is far less work as before.
 
-Installation:
+### Installation:
 
 0. Install Python3.x
 1. Copy the python file, and update the directory where we want to process the filenames.
-2. Edit file location ```os.chdir('/path/to/movies/directory')``` or ```TARGET_DIR = '/path/to/movies/directory'``` to parse the files.
+2. Edit file location: ```TARGET_DIR = '/path/to/<media>/directory'``` to parse the files.
 3. Run - ```python movie_name_parser.py``` to clean Movie titles & ```python tv_show_name_parser.py``` for TV Shows
 
-## Movie name parser
+### Missing Info / Bugs
+
+- :cold_sweat: Something broken? [Open an issue](https://github.com/shreyasgaonkar/Plex-filename-parser/issues) with a few sample inputs where it breaks. Screenshots help!
+
+- For any addition feature request, [open a new issue](https://github.com/shreyasgaonkar/Plex-filename-parser/issues)
+
+### Movie name parser
 
 Follows the requirements as per [Plex naming scheme](https://support.plex.tv/articles/200381023-naming-movie-files/) -
 
@@ -23,7 +29,7 @@ Follows the requirements as per [Plex naming scheme](https://support.plex.tv/art
       poster.jpg
 ```
 
-## TV-show name parser
+### TV-show name parser
 
 Follows the requirements as per [Plex naming scheme](https://support.plex.tv/articles/200220687-naming-series-season-based-tv-shows/) -
 
@@ -37,6 +43,7 @@ Follows the requirements as per [Plex naming scheme](https://support.plex.tv/art
 ```
 
 [movie_name_parser.py](movie_name_parser.py)
+
 ### Directory structure before:
 ```
 $ tree .
@@ -65,6 +72,21 @@ $ tree .
 ```
 
 
-## Changelog
+### Output
+
+```shell
+[INFO] Starting script under /tmp/TV-Shows directory. If this isn't right, please replace the value of `TARGET_DIR` variable in this script.
+
+Renamed directory: /tmp/TV-Shows/Grey's Anatomy (2001) 4k -> /tmp/TV-Shows/Grey's Anatomy (2001)
+
+Renamed file: Grey'S Anatomy (2005) - s01e01 - Pt1.avi -> Grey's Anatomy (2005) - s01e01 - Pt1.avi
+Renamed file: Grey'S Anatomy (2005) - s01e01 - Pt2.avi -> Grey's Anatomy (2005) - s01e01 - Pt2.avi
+Renamed file: Grey'S Anatomy (2005) - s01e03.mp4 -> Grey's Anatomy (2005) - s01e03.mp4
+Renamed file: Grey'S Anatomy (2005) - s01e02 - The First Cut Is The Deepest.avi -> Grey's Anatomy (2005) - s01e02 - The First Cut Is The Deepest.avi
+
+[INFO] Finished execution
+```
+
+### Changelog
 
 Check [Changelog.md](https://github.com/shreyasgaonkar/Plex-filename-parser/blob/master/CHANGELOG.md)
