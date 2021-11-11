@@ -23,6 +23,7 @@ def capitalize_title(text):
 def remove_unwanted_chars(text):
     """ Replace '.' & '%20' and any whitespaces """
     text = text.replace(".", " ").replace("-", " ").replace("%20", " ")
+    text = text.strip()
     text = re.sub(r"\s+", " ", text)
     return text
 
@@ -43,7 +44,7 @@ def blacklist_word_fix(text):
         if keyword in text.lower():
             temp = re.split(keyword, text)
             text = temp[0]
-    return text
+    return text.strip()
 
 
 def clean_file(directory_path, file_name):
