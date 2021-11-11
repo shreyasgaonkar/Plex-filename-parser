@@ -1,6 +1,9 @@
+#### 1.1.6
+* **Improvements:** Delete unwanted files, add unit tests and fix unhandled bugs caught in unit test. Add gitignore.
+
 #### 1.1.5
 
-* **Improvements:** Cleaned underlying code [tv_show_name_parser.py](tv_show_name_parser) to better handle files and directories for TV shows. This should run faster for large files using multithreading.
+* **Improvements:** Cleanunderlying code [tv_show_name_parser.py](tv_show_name_parser) to better handle files and directories for TV shows. This should run faster for large files using multithreading.
 
 #### 1.1.4
 
