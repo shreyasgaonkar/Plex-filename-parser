@@ -1,6 +1,7 @@
 import re
 import os
 import shutil
+import string
 
 # Change this to point to the directory containing movies
 TARGET_DIR = '/path/to/movies/directory'
@@ -41,6 +42,7 @@ def clean_directory(path_name, dir_name):
     original_dir_name = dir_name
     dir_name = dir_name.strip()
 
+    dir_name = capitalize_title(dir_name)
     dir_name = remove_unwanted_chars(dir_name)
     dir_name = year_fix(dir_name)
     dir_name = blacklist_word_fix(dir_name)
@@ -72,6 +74,7 @@ def clean_file(path_name, file_name):
     original_file_name = file_name
     file_ext = os.path.splitext(file_name)[1][1:]
 
+    file_name = capitalize_title(file_name)
     file_name = remove_unwanted_chars(file_name)
     file_name = year_fix(file_name)
     file_name = blacklist_word_fix(file_name)
@@ -98,18 +101,16 @@ def roman_char_fix(text):
 
 
 def year_fix(text):
-    """ Return year from the title """
+    """ Update year in the title if it exists """
     parsed_name = re.split(r'([12][90]\d{2})', text)
-    if len(parsed_name) >= 2:
-        # parse year
-        year = parsed_name[1]
-        parsed_name[0] = re.split(r'[\(\[\{\<]', parsed_name[0])
-        parsed_name[0] = ''.join(parsed_name[0])
-        parsed_name = f'{parsed_name[0]} ({year})'
-    else:
-        parsed_name = parsed_name[0]
 
-    return parsed_name
+    if len(parsed_name) > 1:
+        title, year, _ = parsed_name
+        title = re.split(r'[\(\[\{\<]', title)
+        title = ''.join(title)
+        return f'{title}({year})'
+    else:
+        return parsed_name[0]
 
 
 def blacklist_word_fix(text):
@@ -129,8 +130,16 @@ def remove_whitespaces(text):
 
 
 def remove_unwanted_chars(text):
-    """ # Replace '.' & '%20' """
+    """ Replace '.' & '%20' and any whitespaces """
     text = text.replace(".", " ").replace("-", " ").replace("%20", " ")
+    text = text.strip()
+    text = re.sub(r"\s+", " ", text)
+    return text
+
+
+def capitalize_title(text):
+    """ Alternative to string.title() for apostrophes """
+    text = string.capwords(text).strip()  # .title() replaces 's -> 'S
     return text
 
 
