@@ -22,39 +22,40 @@ def capitalize_title(text):
 
 def remove_unwanted_chars(text):
     """ Replace '.' & '%20' and any whitespaces """
-    text = text.replace(".", " ").replace("-", " ").replace("%20", " ")
-    text = text.strip()
+    text = text.replace(".", " ").replace("-", " ").replace("%20", " ").strip()
     text = re.sub(r"\s+", " ", text)
     return text
 
 
 def roman_char_fix(text):
     """ Return file/dir name for Roman chars """
-    temp = text.split(" ")
-    for i, j in enumerate(temp):
-        if j.lower() in ROMAN:
-            temp[i] = j.upper()
-    text = " ".join(temp)
-    return text
+    words = text.split(" ")
+
+    for index, word in enumerate(words):
+        if word.lower() in ROMAN:
+            words[index] = word.upper()
+    return " ".join(words)
 
 
 def blacklist_word_fix(text):
     """ Remove blacklisted keywords """
-    for keyword in BLACKLIST:
-        if keyword in text.lower():
-            temp = re.split(keyword, text)
-            text = temp[0]
-    return text.strip()
+    title = text.split(" ")
+    new_title = ""
+
+    for word in title:
+        if not word.lower() in BLACKLIST:
+            new_title += f"{word} "
+    return new_title.strip()
 
 
 def clean_file(directory_path, file_name):
-    """ For a given filename, sanitize it as per Plex's standards
+    """
+    For a given filename, sanitize it as per Plex's standards
 
     1. Clean the name of the individual file. If no name present, grab name from the parent.
     2. Year of release is optional. If present add it under `()`
     """
 
-    original_dir_path = directory_path
     original_file_name = file_name
 
     file_name, file_extension = os.path.splitext(file_name)
@@ -104,7 +105,10 @@ def clean_file_name(file_path, file_name, file_extension, original_file_name):
 
 
 def rename_file(season_and_episode, file_extension, original_file_name, file_path):
-    """ Rename files as per Plex's recommendations. Eg: Grey's Anatomy (2005) - s01e02 - The First Cut is the Deepest.avi """
+    """
+    Rename files as per Plex's recommendations.
+    Eg: Grey's Anatomy (2005) - s01e02 - The First Cut is the Deepest.avi
+    """
     new_file_name = f"{' - '.join(season_and_episode)}{file_extension}"
 
     try:
