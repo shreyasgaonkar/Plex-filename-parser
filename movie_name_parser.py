@@ -109,8 +109,7 @@ def year_fix(text):
         title = re.split(r'[\(\[\{\<]', title)
         title = ''.join(title)
         return f'{title}({year})'
-    else:
-        return parsed_name[0]
+    return parsed_name[0]
 
 
 def blacklist_word_fix(text):
