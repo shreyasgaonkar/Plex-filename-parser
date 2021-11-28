@@ -1,9 +1,15 @@
+#### 1.1.8
+* **Improvements:** Clean tv_show_name_parser.py](tv_show_name_parser) functions and verify unit tests.
+
+#### 1.1.7
+* **Improvements:** Add test_movie_name_parser.py unit test and fix movie_name_parse filename bug for year_fix() function.
+
 #### 1.1.6
 * **Improvements:** Delete unwanted files, add unit tests and fix unhandled bugs caught in unit test. Add gitignore.
 
 #### 1.1.5
 
-* **Improvements:** Cleanunderlying code [tv_show_name_parser.py](tv_show_name_parser) to better handle files and directories for TV shows. This should run faster for large files using multithreading.
+* **Improvements:** Clean underlying code [tv_show_name_parser.py](tv_show_name_parser) to better handle files and directories for TV shows. This should run faster for large files using multithreading.
 
 #### 1.1.4
 
@@ -11,7 +17,7 @@
 
 #### 1.1.3
 
-* **Improvements:** Cleaned underlying code ```tv_show_name_parser``` to parse files. Code is now PEP8 complaint :tada:
+* **Improvements:** Clean underlying code ```tv_show_name_parser``` to parse files. Code is now PEP8 complaint :tada:
 
 #### 1.1.2
 
@@ -23,10 +29,8 @@
 
 #### 1.1.0
 
-##### Documentation Changes
-
-* **New Features:** Add new script to clean TV show files
+* **Features:** Add [tv_show_name_parser.py](tv_show_name_parser) to clean TV show files
 
 #### 1.0.0
 
-* **New Features:**  Add movie parser file
+* **Features:**  Add [movie_name_parser.py](/movie_name_parser.py)

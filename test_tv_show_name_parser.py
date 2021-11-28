@@ -36,7 +36,7 @@ class TestTvShowNameParser(unittest.TestCase):
 
     def test_blacklist_word_fix(self):
         self.assertEqual(
-            tv_show_name_parser.blacklist_word_fix("harry potter and the half blood prince dvdrip 2006"), "harry potter and the half blood prince")
+            tv_show_name_parser.blacklist_word_fix("harry potter and the half blood prince dvdrip 2006"), "harry potter and the half blood prince 2006")
         self.assertEqual(
             tv_show_name_parser.blacklist_word_fix("rise of the planet of the apes iii 2015"), "rise of the planet of the apes iii 2015")
 
