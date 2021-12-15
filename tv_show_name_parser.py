@@ -20,6 +20,17 @@ def capitalize_title(text):
     return text
 
 
+def blacklist_word_fix(text):
+    """ Remove blacklisted keywords """
+    title = text.split(" ")
+    new_title = ""
+
+    for word in title:
+        if not word.lower() in BLACKLIST:
+            new_title += f"{word} "
+    return new_title.strip()
+
+
 def remove_unwanted_chars(text):
     """ Replace '.' & '%20' and any whitespaces """
     text = text.replace(".", " ").replace("-", " ").replace("%20", " ").strip()
@@ -37,15 +48,26 @@ def roman_char_fix(text):
     return " ".join(words)
 
 
-def blacklist_word_fix(text):
-    """ Remove blacklisted keywords """
-    title = text.split(" ")
-    new_title = ""
+def get_season_and_episode(file_name, file_path):
+    # Check if file name contains SXXEXX format, if so rename as Plex requires
+    season_and_episode = re.split(r'([Ss]\d{,2}[Ee]\d{,2})', file_name)
 
-    for word in title:
-        if not word.lower() in BLACKLIST:
-            new_title += f"{word} "
-    return new_title.strip()
+    season_and_episode = [i.replace("-", "").strip()
+                          for i in season_and_episode]
+
+    # sXXeXX should be lowercase
+    season_and_episode = [i.lower() if i.startswith("S") else i
+                          for i in season_and_episode]
+
+    # Here sXXeXX can be either at 1st or 2nd position in the array.
+    # If this is at first, get season from parent. If at second, don't change
+    if re.findall(r'([Ss]\d{,2}[Ee]\d{,2})', season_and_episode[0]):
+        season_and_episode.insert(0, file_path.split("/")[-1])
+
+    # Remove empty vals
+    season_and_episode = [x for x in season_and_episode if x]
+
+    return season_and_episode
 
 
 def clean_file(directory_path, file_name):
@@ -81,24 +103,7 @@ def clean_file_name(file_path, file_name, file_extension, original_file_name):
     file_name = blacklist_word_fix(file_name)
     file_name = remove_unwanted_chars(file_name)
     file_name = roman_char_fix(file_name)
-
-    # Check if file name contains SXXEXX format, if so rename as Plex requires
-    season_and_episode = re.split(r'([Ss]\d{,2}[Ee]\d{,2})', file_name)
-
-    season_and_episode = [i.replace("-", "").strip()
-                          for i in season_and_episode]
-
-    # sXXeXX should be .lower() as per Plex
-    season_and_episode = [i.lower() if i.startswith("S") else i
-                          for i in season_and_episode]
-
-    # Here sXXeXX can be either at 1st or 2nd position in the array.
-    # If this is at first, get season from parent. If at second, don't change
-    if re.findall(r'([Ss]\d{,2}[Ee]\d{,2})', season_and_episode[0]):
-        season_and_episode.insert(0, file_path.split("/")[-1])
-
-    # Remove empty vals
-    season_and_episode = [x for x in season_and_episode if x]
+    season_and_episode = get_season_and_episode(file_name, file_path)
 
     rename_file(season_and_episode, file_extension,
                 original_file_name, file_path)
