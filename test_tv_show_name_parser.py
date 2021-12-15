@@ -14,6 +14,12 @@ class TestTvShowNameParser(unittest.TestCase):
         self.assertEqual(tv_show_name_parser.capitalize_title(
             "harry potter and the half blood prince"), "Harry Potter And The Half Blood Prince")
 
+    def test_blacklist_word_fix(self):
+        self.assertEqual(
+            tv_show_name_parser.blacklist_word_fix("harry potter and the half blood prince dvdrip 2006"), "harry potter and the half blood prince 2006")
+        self.assertEqual(
+            tv_show_name_parser.blacklist_word_fix("rise of the planet of the apes iii 2015"), "rise of the planet of the apes iii 2015")
+
     def test_remove_unwanted_chars(self):
         self.assertEqual(
             tv_show_name_parser.remove_unwanted_chars("     Venom     "), "Venom")
@@ -34,11 +40,11 @@ class TestTvShowNameParser(unittest.TestCase):
         self.assertEqual(
             tv_show_name_parser.roman_char_fix("Harry Potter And The Half Blood Prince"), "Harry Potter And The Half Blood Prince")
 
-    def test_blacklist_word_fix(self):
+    def test_get_season_and_episode(self):
         self.assertEqual(
-            tv_show_name_parser.blacklist_word_fix("harry potter and the half blood prince dvdrip 2006"), "harry potter and the half blood prince 2006")
+            tv_show_name_parser.get_season_and_episode("Grey's Anatomy - S02E01.avi", "."), ["Grey's Anatomy", 's02e01', '.avi'])
         self.assertEqual(
-            tv_show_name_parser.blacklist_word_fix("rise of the planet of the apes iii 2015"), "rise of the planet of the apes iii 2015")
+            tv_show_name_parser.get_season_and_episode("Grey's Anatomy.avi", "."), ["Grey's Anatomy.avi"])
 
 
 if __name__ == "__main__":
