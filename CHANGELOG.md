@@ -1,3 +1,6 @@
+#### 1.1.9
+* **Improvements:** Minor code change.
+
 #### 1.1.8
 * **Improvements:** Clean tv_show_name_parser.py](tv_show_name_parser) functions and verify unit tests.
 
