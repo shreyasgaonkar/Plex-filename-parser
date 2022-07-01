@@ -1,51 +1,16 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
+
+
 import shutil
 import os
-import string
 import concurrent.futures  # for multithreading
 import re
 
+from plex.util import roman_char_fix, blacklist_word_fix, remove_unwanted_chars, capitalize_title
+
 # Change this to point to the directory containing TV shows
-TARGET_DIR = '/path/to/tvshows/directory'
-
-BLACKLIST = {'1080p', '1080', 'blu ray', "bluray", "blu-ray", "4k",
-             "720p", "720", "dvdrip", "dvd", "brrip", "h264", "h265", "mp4"}
-ROMAN = {'i', 'ii', 'iii', 'iv', 'iiii', 'v', 'vi', 'vii', 'viii', 'ix', 'x'}
-
-
-def capitalize_title(text):
-    """ Alternative to string.title() for apostrophes """
-    text = string.capwords(text).strip()  # .title() replaces 's -> 'S
-    return text
-
-
-def blacklist_word_fix(text):
-    """ Remove blacklisted keywords """
-    title = text.split(" ")
-    new_title = ""
-
-    for word in title:
-        if not word.lower() in BLACKLIST:
-            new_title += f"{word} "
-    return new_title.strip()
-
-
-def remove_unwanted_chars(text):
-    """ Replace '.' & '%20' and any whitespaces """
-    text = text.replace(".", " ").replace("-", " ").replace("%20", " ").strip()
-    text = re.sub(r"\s+", " ", text)
-    return text
-
-
-def roman_char_fix(text):
-    """ Return file/dir name for Roman chars """
-    words = text.split(" ")
-
-    for index, word in enumerate(words):
-        if word.lower() in ROMAN:
-            words[index] = word.upper()
-    return " ".join(words)
+TARGET_DIR = "/path/to/tvshows/directory"
 
 
 def get_season_and_episode(file_name, file_path):
@@ -100,8 +65,8 @@ def clean_file_name(file_path, file_name, file_extension, original_file_name):
 
     # 1. Capitalize title & clean string
     file_name = capitalize_title(os.path.splitext(file_name)[0])
-    file_name = blacklist_word_fix(file_name)
     file_name = remove_unwanted_chars(file_name)
+    file_name = blacklist_word_fix(file_name)
     file_name = roman_char_fix(file_name)
     season_and_episode = get_season_and_episode(file_name, file_path)
 
@@ -191,14 +156,14 @@ def main():
 
         # Multithreading
         with concurrent.futures.ThreadPoolExecutor() as executor:
-            results = [executor.submit(
+            [executor.submit(
                 clean_directory, dir_paths, dir_name) for dir_name in dir_names]
 
         with concurrent.futures.ThreadPoolExecutor() as executor:
-            results = [executor.submit(
+            [executor.submit(
                 clean_file, dir_paths, file) for file in files]
 
-    print(f"\n[INFO] Finished execution")
+    print("\n[INFO] Finished execution")
 
 
 if __name__ == "__main__":

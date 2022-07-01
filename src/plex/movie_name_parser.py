@@ -1,7 +1,9 @@
 import re
 import os
 import shutil
-import string
+
+
+from plex.util import BLACKLIST, roman_char_fix, capitalize_title, remove_unwanted_chars, remove_whitespaces
 
 # Change this to point to the directory containing movies
 TARGET_DIR = '/path/to/movies/directory'
@@ -12,10 +14,6 @@ TARGET_DIR = '/path/to/movies/directory'
 2. Get individual files
 3. Parse files and directory name
 """
-
-BLACKLIST = ['1080p', '1080', 'blu ray', "bluray", "blu-ray", "4k",
-             "720p", "720", "dvdrip", "dvd", "brrip", "h264", "h265", "mp4"]
-ROMAN = ['i', 'ii', 'iii', 'iv', 'iiii', 'v', 'vi', 'vii', 'viii', 'ix', 'x']
 
 
 def get_all_files(target_dir):
@@ -90,18 +88,9 @@ def clean_file(path_name, file_name):
         print(f'Updated filename: {file_name}')
 
 
-def roman_char_fix(text):
-    """ Return file/dir name for Roman chars """
-    temp = text.split(" ")
-    for i, j in enumerate(temp):
-        if j.lower() in ROMAN:
-            temp[i] = j.upper()
-    text = " ".join(temp)
-    return text
-
-
 def year_fix(text):
     """ Update year in the title if it exists """
+    text = remove_unwanted_chars(text)
     parsed_name = re.split(r'([12][90]\d{2})', text)
 
     if len(parsed_name) > 1:
@@ -118,27 +107,6 @@ def blacklist_word_fix(text):
         if keyword in text.lower():
             temp = re.split(keyword, text)
             text = temp[0]
-    return text
-
-
-def remove_whitespaces(text):
-    """ Remove extra whitespace and capitalize title """
-    text = re.sub(r'\s+', ' ', text)
-    text = text.capitalize().title()
-    return text
-
-
-def remove_unwanted_chars(text):
-    """ Replace '.' & '%20' and any whitespaces """
-    text = text.replace(".", " ").replace("-", " ").replace("%20", " ")
-    text = text.strip()
-    text = re.sub(r"\s+", " ", text)
-    return text
-
-
-def capitalize_title(text):
-    """ Alternative to string.title() for apostrophes """
-    text = string.capwords(text).strip()  # .title() replaces 's -> 'S
     return text
 
 
