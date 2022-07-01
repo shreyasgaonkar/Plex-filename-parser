@@ -16,7 +16,7 @@ TARGET_DIR = '/path/to/movies/directory'
 """
 
 
-def get_all_files(target_dir):
+def get_all_files(target_dir: str) -> None:
     """ Check all files and folders to verify the naming convention """
     for path, directories, files in os.walk(target_dir):
         for directory in directories:
@@ -25,7 +25,7 @@ def get_all_files(target_dir):
             clean_file(path, file)
 
 
-def clean_directory(path_name, dir_name):
+def clean_directory(path_name: str, dir_name: str) -> None:
     """
     Clean directory name as per Plex standards
 
@@ -55,7 +55,7 @@ def clean_directory(path_name, dir_name):
         print(f"Final dir name: {dir_name}")
 
 
-def clean_file(path_name, file_name):
+def clean_file(path_name: str, file_name: str) -> None:
     """
     Clean file name as per Plex standards
 
@@ -88,7 +88,7 @@ def clean_file(path_name, file_name):
         print(f'Updated filename: {file_name}')
 
 
-def year_fix(text):
+def year_fix(text: str) -> str:
     """ Update year in the title if it exists """
     text = remove_unwanted_chars(text)
     parsed_name = re.split(r'([12][90]\d{2})', text)
@@ -101,7 +101,7 @@ def year_fix(text):
     return parsed_name[0]
 
 
-def blacklist_word_fix(text):
+def blacklist_word_fix(text: str) -> str:
     """ Remove any blacklisted keywords after adding the year """
     for keyword in BLACKLIST:
         if keyword in text.lower():

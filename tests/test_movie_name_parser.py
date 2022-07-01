@@ -40,7 +40,7 @@ test_dict = {
 }
 
 
-def generic_test_function(function_name):
+def generic_test_function(function_name: str) -> None:
     for key, value in test_dict.items():
         test_string = key
         method = value[function_name][0]
