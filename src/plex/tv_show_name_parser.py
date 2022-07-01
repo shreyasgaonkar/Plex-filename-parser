@@ -6,6 +6,7 @@ import shutil
 import os
 import concurrent.futures  # for multithreading
 import re
+from typing import List, Union, Any
 
 from plex.util import roman_char_fix, blacklist_word_fix, remove_unwanted_chars, capitalize_title
 
@@ -13,7 +14,7 @@ from plex.util import roman_char_fix, blacklist_word_fix, remove_unwanted_chars,
 TARGET_DIR = "/path/to/tvshows/directory"
 
 
-def get_season_and_episode(file_name, file_path):
+def get_season_and_episode(file_name: str, file_path: str) -> List[Union[str, Any]]:
     # Check if file name contains SXXEXX format, if so rename as Plex requires
     season_and_episode = re.split(r'([Ss]\d{,2}[Ee]\d{,2})', file_name)
 
@@ -35,7 +36,7 @@ def get_season_and_episode(file_name, file_path):
     return season_and_episode
 
 
-def clean_file(directory_path, file_name):
+def clean_file(directory_path: str, file_name: str) -> None:
     """
     For a given filename, sanitize it as per Plex's standards
 
@@ -53,7 +54,7 @@ def clean_file(directory_path, file_name):
                         file_extension, original_file_name)
 
 
-def clean_file_name(file_path, file_name, file_extension, original_file_name):
+def clean_file_name(file_path: str, file_name: str, file_extension: str, original_file_name: str) -> None:
     """
     Clean filename as per Plex standards:
     https://support.plex.tv/articles/naming-and-organizing-your-tv-show-files/
@@ -74,7 +75,7 @@ def clean_file_name(file_path, file_name, file_extension, original_file_name):
                 original_file_name, file_path)
 
 
-def rename_file(season_and_episode, file_extension, original_file_name, file_path):
+def rename_file(season_and_episode: Any, file_extension: str, original_file_name: str, file_path: str) -> None:
     """
     Rename files as per Plex's recommendations.
     Eg: Grey's Anatomy (2005) - s01e02 - The First Cut is the Deepest.avi
@@ -90,7 +91,7 @@ def rename_file(season_and_episode, file_extension, original_file_name, file_pat
         print(exp)
 
 
-def change_dir_name(new_name, old_name):
+def change_dir_name(new_name: str, old_name: str) -> None:
     """ Rename the directory using shutil """
     try:
         if(new_name != old_name):
@@ -101,7 +102,7 @@ def change_dir_name(new_name, old_name):
         print(e)
 
 
-def clean_directory(directory_path, directory_name):
+def clean_directory(directory_path: str, directory_name: str) -> Any:
     """
     Function to rename directory name as per Plex standards.
 
