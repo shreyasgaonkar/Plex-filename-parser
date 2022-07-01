@@ -1,3 +1,6 @@
+#### 1.2
+* **Improvements:** Add python unit tests, GitHub actions to automatically test new changes and refactor code.
+
 #### 1.1.9
 * **Improvements:** Minor code change.
 
