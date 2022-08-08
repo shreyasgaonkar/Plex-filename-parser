@@ -67,9 +67,6 @@ def handle_directory_exists_error(dir_name, original_dir_name, path_name):
     old_dir_path = f'{path_name}/{original_dir_name}'
 
     for path, directories, files in os.walk(old_dir_path):
-        # for directory in directories:
-        #     print(f"directory is {directory}")
-        #     print(f"Path is {path}")
         for file in files:
             print(f"Files are {file}")
             print(f"Current path is {path}")
