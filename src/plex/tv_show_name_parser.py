@@ -94,7 +94,7 @@ def rename_file(season_and_episode: Any, file_extension: str, original_file_name
 def change_dir_name(new_name: str, old_name: str) -> None:
     """ Rename the directory using shutil """
     try:
-        if(new_name != old_name):
+        if new_name != old_name:
             shutil.move(old_name, new_name)
             print(f"Renamed Directory: {old_name} -> {new_name}")
     # If the filename exists, skip

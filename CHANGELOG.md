@@ -1,3 +1,9 @@
+#### 1.2.2
+* **Improvements:** Handle invalid file names and duplicate directories gracefully.
+
+#### 1.2.1
+* **Improvements:** Add python type hints.
+
 #### 1.2
 * **Improvements:** Add python unit tests, GitHub actions to automatically test new changes and refactor code.
 

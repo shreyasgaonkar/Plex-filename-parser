@@ -4,10 +4,16 @@ While trying to clean my Plex media database, I was tired of changing the naming
 
 ### Installation:
 
-0. Install Python3.x
-1. Copy the python file, and update the directory where we want to process the filenames.
-2. Edit file location: ```TARGET_DIR = '/path/to/<media>/directory'``` to parse the files.
-3. Run - ```python movie_name_parser.py``` to clean Movie titles & ```python tv_show_name_parser.py``` for TV Shows
+1. Install Python3.x
+1. `git clone git@github.com:shreyasgaonkar/Plex-filename-parser.git && cd Plex-filename-parser`
+1. `python movie_name_parser.py` to clean Movie titles & `python tv_show_name_parser.py` for TV Shows
+1. `python3 -m pip install requirements.txt`
+1. `python3 -m pip install requirements_dev.txt`
+1. `mypy src`
+1. `flake8 src`
+1. `pytest`
+1. `tox` # before git push/pull
+
 
 ### Missing Info / Bugs
 
