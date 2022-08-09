@@ -1,5 +1,8 @@
 # Plex filename parser using Python [![CodeFactor](https://www.codefactor.io/repository/github/shreyasgaonkar/plex-filename-parser/badge)](https://www.codefactor.io/repository/github/shreyasgaonkar/plex-filename-parser) ![Tests](https://github.com/shreyasgaonkar/Plex-filename-parser/actions/workflows/tests.yml/badge.svg)
 
+### How I setup my plex
+I've created (yet) another repository to go over this in a little more depth here: https://github.com/shreyasgaonkar/plex
+
 While trying to clean my Plex media database, I was tired of changing the naming schemes to match [Plex's standards](https://support.plex.tv/articles/naming-and-organizing-your-tv-show-files/). I wrote this simple script in Python to clean (most) of my databases which typically would take me hours of my weekend time to sit and manually update it. In few cases (duplicate file names), I still have to manually intervene once a while, but that is far less work as before.
 
 ### Installation:
