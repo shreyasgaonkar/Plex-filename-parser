@@ -1,10 +1,9 @@
 import re
 import os
 import shutil
-import sys
 
 
-from plex.util import BLACKLIST, roman_char_fix, capitalize_title, remove_unwanted_chars, remove_whitespaces
+from plex.util import BLACKLIST, roman_char_fix, capitalize_title, remove_unwanted_chars, remove_whitespaces, BackgroundColors
 
 # Change this to point to the directory containing movies
 TARGET_DIR = '/path/to/movies/directory'
@@ -50,15 +49,15 @@ def clean_directory(path_name: str, dir_name: str) -> None:
 
     # Replace if any changes
     if dir_name != original_dir_name:
-        print(f"Original dir name: {original_dir_name}")
         try:
             shutil.move(os.path.join(path_name, original_dir_name), os.path.join(path_name, dir_name))
         except OSError as e:
             if "Destination path" and "already exists" in str(e):
-                print("Dir already exists")
+                print(f"{BackgroundColors.WARNING}Dir already exists{BackgroundColors.ENDC}")
                 handle_directory_exists_error(dir_name, original_dir_name, path_name)
-                sys.exit(1)
-        print(f"Final dir name: {dir_name}")
+        else:
+            print(f"{BackgroundColors.OKGREEN}Original dir name: {original_dir_name}{BackgroundColors.ENDC}")
+            print(f"{BackgroundColors.OKGREEN}Final dir name: {dir_name}{BackgroundColors.ENDC}")
 
 
 def handle_directory_exists_error(dir_name, original_dir_name, path_name):
@@ -66,19 +65,17 @@ def handle_directory_exists_error(dir_name, original_dir_name, path_name):
 
     old_dir_path = f'{path_name}/{original_dir_name}'
 
-    for path, directories, files in os.walk(old_dir_path):
+    for path, _directories, files in os.walk(old_dir_path):
         for file in files:
-            print(f"Files are {file}")
-            print(f"Current path is {path}")
             new_path = path.replace(original_dir_name, dir_name)
 
             if not os.path.exists(new_path):
                 os.makedirs(new_path)
 
             shutil.move(os.path.join(path, file), os.path.join(new_path, file))
-            print(f"Moved the file from {original_dir_name} to {dir_name}")
+            print(f"{BackgroundColors.OKGREEN}Moved the file from {original_dir_name} to {dir_name}{dir_name}{BackgroundColors.ENDC}")
 
-    print(f"Removing dir: {path_name}/{original_dir_name}")
+    print(f"{BackgroundColors.OKBLUE}Removing dir: {path_name}/{original_dir_name}{BackgroundColors.ENDC}")
     shutil.rmtree(f"{path_name}/{original_dir_name}")
 
 
@@ -99,6 +96,13 @@ def clean_file(path_name: str, file_name: str) -> None:
     original_file_name = file_name
     file_ext = os.path.splitext(file_name)[1][1:]
 
+    # Remove .random extension files
+    if ".random" in file_name.lower():
+        full_file_path = os.path.join(path_name, file_name)
+        os.remove(full_file_path)
+        print(f"{BackgroundColors.OKBLUE}Removed .random file: {full_file_path}{BackgroundColors.ENDC}")
+        return
+
     remove_empty_files(path_name)
     file_name = capitalize_title(file_name)
     file_name = remove_unwanted_chars(file_name)
@@ -111,10 +115,14 @@ def clean_file(path_name: str, file_name: str) -> None:
 
     # Rename the files
     if file_name != original_file_name:
-        print(f'Original filename: {original_file_name}')
-        shutil.move(os.path.join(path_name, original_file_name),
-                    os.path.join(path_name, file_name))
-        print(f'Updated filename: {file_name}')
+        try:
+            shutil.move(os.path.join(path_name, original_file_name),
+                        os.path.join(path_name, file_name))
+        except Exception as exp:
+            print(f"{BackgroundColors.FAIL}[Error] {exp}{BackgroundColors.ENDC}")
+        else:
+            print(f'Original filename: {original_file_name}')
+            print(f'Updated filename: {file_name}')
 
 
 def remove_duplicate_file_ext(file_name: str, file_ext: str) -> str:
@@ -130,8 +138,8 @@ def remove_empty_files(path_name):
                 if os.path.getsize(fullpath) < 1:
                     print(fullpath)
                     os.remove(fullpath)
-            except Exception:
-                print("Error" + fullpath)
+            except Exception as exp:
+                print(f"{BackgroundColors.FAIL}[Error] {exp} at {fullpath}{BackgroundColors.ENDC}")
 
 
 def year_fix(text: str) -> str:
@@ -159,6 +167,7 @@ def blacklist_word_fix(text: str) -> str:
 def main():
     """ Main function """
     get_all_files(TARGET_DIR)
+    print(f"{BackgroundColors.OKCYAN}Completed running the script.{BackgroundColors.ENDC}")
 
 
 if __name__ == '__main__':
