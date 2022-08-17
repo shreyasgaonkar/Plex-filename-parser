@@ -6,6 +6,18 @@ BLACKLIST = {"1080p", "1080", "blu ray", "bluray", "blu-ray", "4k",
 ROMAN = {"i", "ii", "iii", "iv", "iiii", "v", "vi", "vii", "viii", "ix", "x"}
 
 
+class BackgroundColors:
+    HEADER = "\033[95m"
+    OKBLUE = "\033[94m"
+    OKCYAN = "\033[96m"
+    OKGREEN = "\033[92m"
+    WARNING = "\033[93m"
+    FAIL = "\033[91m"
+    ENDC = "\033[0m"
+    BOLD = "\033[1m"
+    UNDERLINE = "\033[4m"
+
+
 def roman_char_fix(text: str) -> str:
     """Return file/dir name with Roman chars upper-cased"""
     if "." in text:
