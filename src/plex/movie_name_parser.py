@@ -126,8 +126,7 @@ def clean_file(path_name: str, file_name: str) -> None:
 
 
 def remove_duplicate_file_ext(file_name: str, file_ext: str) -> str:
-    file_name = file_name.replace(file_ext.capitalize(), '').strip()
-    return file_name
+    return file_name.replace(file_ext.capitalize(), '').strip()
 
 
 def remove_empty_files(path_name):
@@ -145,7 +144,7 @@ def remove_empty_files(path_name):
 def year_fix(text: str) -> str:
     """ Update year in the title if it exists """
     text = remove_unwanted_chars(text)
-    parsed_name = re.split(r'([12][90]\d{2})', text)
+    parsed_name = re.split(r'([12][90]\d{2})', text, re.IGNORECASE)
 
     if len(parsed_name) > 1:
         title, year, *_ = parsed_name
