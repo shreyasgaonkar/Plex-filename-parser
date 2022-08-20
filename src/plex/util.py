@@ -2,7 +2,7 @@ import re
 import string
 
 BLACKLIST = {"1080p", "1080", "blu ray", "bluray", "blu-ray", "4k",
-             "720p", "720", "dvdrip", "dvd", "brrip", "h264", "h265", "mp4", "hdtv"}
+             "720p", "720", "480", "480p", "webdl" , "dvdrip", "dvd", "brrip", "h264", "h265", "mp4", "hdtv", "x264", "hdtvrip"}
 ROMAN = {"i", "ii", "iii", "iv", "iiii", "v", "vi", "vii", "viii", "ix", "x"}
 
 
