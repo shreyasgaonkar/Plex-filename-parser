@@ -1,8 +1,28 @@
 import re
 import string
 
-BLACKLIST = {"1080p", "1080", "blu ray", "bluray", "blu-ray", "4k",
-             "720p", "720", "480", "480p", "webdl" , "dvdrip", "dvd", "brrip", "h264", "h265", "mp4", "hdtv", "x264", "hdtvrip"}
+BLACKLIST = {
+    "1080p",
+    "1080",
+    "blu ray",
+    "bluray",
+    "blu-ray",
+    "4k",
+    "720p",
+    "720",
+    "480",
+    "480p",
+    "webdl",
+    "dvdrip",
+    "dvd",
+    "brrip",
+    "h264",
+    "h265",
+    "mp4",
+    "hdtv",
+    "x264",
+    "hdtvrip",
+}
 ROMAN = {"i", "ii", "iii", "iv", "iiii", "v", "vi", "vii", "viii", "ix", "x"}
 
 
@@ -59,7 +79,7 @@ def capitalize_title(text: str) -> str:
 
 
 def remove_whitespaces(text: str) -> str:
-    """ Remove extra whitespace and capitalize title """
-    text = re.sub(r'\s+', ' ', text)
+    """Remove extra whitespace and capitalize title"""
+    text = re.sub(r"\s+", " ", text)
     text = capitalize_title(text)
     return text

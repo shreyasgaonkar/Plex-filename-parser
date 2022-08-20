@@ -1,4 +1,9 @@
-from plex.tv_show_name_parser import capitalize_title, blacklist_word_fix, remove_unwanted_chars, roman_char_fix, get_season_and_episode
+from plex.tv_show_name_parser import (
+    capitalize_title,
+    blacklist_word_fix,
+    remove_unwanted_chars,
+    roman_char_fix,
+)
 
 # Define the test string as the key, and value as another key-value with key being the method against the original string, and the value is the target result
 test_dict = {
@@ -9,9 +14,18 @@ test_dict = {
         "roman_char_fix": (roman_char_fix, "The Secret Circle S01E19"),
     },
     "Fargo S01E07 HDTV x264 AAC E-Subs [GWC]": {
-        "capitalize_title": (capitalize_title, "Fargo S01e07 Hdtv X264 Aac E-subs [gwc]"),
-        "blacklist_word_fix": (blacklist_word_fix, "Fargo S01E07 x264 AAC E-Subs [GWC]"),
-        "remove_unwanted_chars": (remove_unwanted_chars, "Fargo S01E07 HDTV x264 AAC E-Subs [GWC]"),
+        "capitalize_title": (
+            capitalize_title,
+            "Fargo S01e07 Hdtv X264 Aac E-subs [gwc]",
+        ),
+        "blacklist_word_fix": (
+            blacklist_word_fix,
+            "Fargo S01E07 AAC E-Subs [GWC]",
+        ),
+        "remove_unwanted_chars": (
+            remove_unwanted_chars,
+            "Fargo S01E07 HDTV x264 AAC E-Subs [GWC]",
+        ),
         "roman_char_fix": (roman_char_fix, "Fargo S01E07 HDTV x264 AAC E-Subs [GWC]"),
     },
     "Supernatural S1E08 - Bugs": {
@@ -21,10 +35,22 @@ test_dict = {
         "roman_char_fix": (roman_char_fix, "Supernatural S1E08 - Bugs"),
     },
     "Silicon.Valley.S03E09.720p.HDTV.275MB.GoenWae": {
-        "capitalize_title": (capitalize_title, "Silicon Valley S03e09 720p Hdtv 275mb Goenwae"),
-        "blacklist_word_fix": (blacklist_word_fix, "Silicon Valley S03E09 275MB GoenWae"),
-        "remove_unwanted_chars": (remove_unwanted_chars, "Silicon Valley S03E09 720p HDTV 275MB GoenWae"),
-        "roman_char_fix": (roman_char_fix, "Silicon Valley S03E09 720p HDTV 275MB GoenWae"),
+        "capitalize_title": (
+            capitalize_title,
+            "Silicon Valley S03e09 720p Hdtv 275mb Goenwae",
+        ),
+        "blacklist_word_fix": (
+            blacklist_word_fix,
+            "Silicon Valley S03E09 275MB GoenWae",
+        ),
+        "remove_unwanted_chars": (
+            remove_unwanted_chars,
+            "Silicon Valley S03E09 720p HDTV 275MB GoenWae",
+        ),
+        "roman_char_fix": (
+            roman_char_fix,
+            "Silicon Valley S03E09 720p HDTV 275MB GoenWae",
+        ),
     },
 }
 
@@ -40,10 +66,10 @@ def generic_test_function(function_name: str) -> None:
     value as another dict with API name and the target string.
 
     Nested dict structure:
-        - key (string): API method to be called 
-        - value (two valued tuple): 
+        - key (string): API method to be called
+        - value (two valued tuple):
             - first: API name (again)
-            - second: expected return string from the API 
+            - second: expected return string from the API
     """
 
     for key, value in test_dict.items():

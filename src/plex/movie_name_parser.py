@@ -2,11 +2,18 @@ import re
 import os
 import shutil
 
-from plex.util import BLACKLIST, roman_char_fix, capitalize_title, remove_unwanted_chars, remove_whitespaces, BackgroundColors
+from plex.util import (
+    BLACKLIST,
+    roman_char_fix,
+    capitalize_title,
+    remove_unwanted_chars,
+    remove_whitespaces,
+    BackgroundColors,
+)
 
 
 # Change this to point to the directory containing movies
-TARGET_DIR = '/path/to/movies/directory'
+TARGET_DIR = "/path/to/movies/directory"
 
 # Change this to False when ready to rename the files/directories
 IS_DRY_RUN = False
@@ -20,7 +27,7 @@ IS_DRY_RUN = False
 
 
 def get_all_files(target_dir: str) -> None:
-    """ Check all files and folders to verify the naming convention """
+    """Check all files and folders to verify the naming convention"""
     for path, directories, files in os.walk(target_dir):
         for directory in directories:
             clean_directory(path, directory)
@@ -53,20 +60,27 @@ def clean_directory(path_name: str, dir_name: str) -> None:
     # Replace if any changes
     if dir_name != original_dir_name and not IS_DRY_RUN:
         try:
-            shutil.move(os.path.join(path_name, original_dir_name), os.path.join(path_name, dir_name))
+            shutil.move(
+                os.path.join(path_name, original_dir_name),
+                os.path.join(path_name, dir_name),
+            )
             pass
         except OSError as e:
             if "Destination path" and "already exists" in str(e):
-                print(f"{BackgroundColors.WARNING}Dir already exists{BackgroundColors.ENDC}")
+                print(
+                    f"{BackgroundColors.WARNING}Dir already exists{BackgroundColors.ENDC}"
+                )
                 handle_directory_exists_error(dir_name, original_dir_name, path_name)
         else:
-            print(f"{BackgroundColors.OKGREEN}Renamed dir: {original_dir_name} -> {dir_name}{BackgroundColors.ENDC}")
+            print(
+                f"{BackgroundColors.OKGREEN}Renamed dir: {original_dir_name} -> {dir_name}{BackgroundColors.ENDC}"
+            )
 
 
 def handle_directory_exists_error(dir_name, original_dir_name, path_name):
     """List all files in the original dir and move the path to new dir"""
 
-    old_dir_path = f'{path_name}/{original_dir_name}'
+    old_dir_path = f"{path_name}/{original_dir_name}"
 
     for path, _directories, files in os.walk(old_dir_path):
         for file in files:
@@ -76,9 +90,13 @@ def handle_directory_exists_error(dir_name, original_dir_name, path_name):
                 os.makedirs(new_path)
 
             shutil.move(os.path.join(path, file), os.path.join(new_path, file))
-            print(f"{BackgroundColors.OKGREEN}Moved the file from {original_dir_name} to {dir_name}{dir_name}{BackgroundColors.ENDC}")
+            print(
+                f"{BackgroundColors.OKGREEN}Moved the file from {original_dir_name} to {dir_name}{dir_name}{BackgroundColors.ENDC}"
+            )
 
-    print(f"{BackgroundColors.OKBLUE}Removing dir: {path_name}/{original_dir_name}{BackgroundColors.ENDC}")
+    print(
+        f"{BackgroundColors.OKBLUE}Removing dir: {path_name}/{original_dir_name}{BackgroundColors.ENDC}"
+    )
     shutil.rmtree(f"{path_name}/{original_dir_name}")
 
 
@@ -93,7 +111,7 @@ def clean_file(path_name: str, file_name: str) -> None:
     5. Check for any Roman chars and uppercase them
     6. Rename the original file
     """
-    if file_name.startswith('.'):
+    if file_name.startswith("."):
         return
 
     original_file_name = file_name
@@ -107,17 +125,21 @@ def clean_file(path_name: str, file_name: str) -> None:
     file_name = remove_whitespaces(file_name)
     file_name = roman_char_fix(file_name)
     file_name = remove_duplicate_file_ext(file_name, file_ext)
-    file_name = f'{file_name}.{file_ext}'
+    file_name = f"{file_name}.{file_ext}"
 
     # Rename the files
     if file_name != original_file_name and not IS_DRY_RUN:
-        shutil.move(os.path.join(path_name, original_file_name),
-                    os.path.join(path_name, file_name))
-        print(f"{BackgroundColors.OKBLUE}Renamed file: {original_file_name} ->  {file_name}{BackgroundColors.ENDC}")
+        shutil.move(
+            os.path.join(path_name, original_file_name),
+            os.path.join(path_name, file_name),
+        )
+        print(
+            f"{BackgroundColors.OKBLUE}Renamed file: {original_file_name} ->  {file_name}{BackgroundColors.ENDC}"
+        )
 
 
 def remove_duplicate_file_ext(file_name: str, file_ext: str) -> str:
-    return file_name.replace(file_ext.capitalize(), '').strip()
+    return file_name.replace(file_ext.capitalize(), "").strip()
 
 
 def remove_empty_files(path_name):
@@ -129,41 +151,47 @@ def remove_empty_files(path_name):
                     print(fullpath)
                     os.remove(fullpath)
             except Exception as exp:
-                print(f"{BackgroundColors.FAIL}[Error] {exp} at {fullpath}{BackgroundColors.ENDC}")
+                print(
+                    f"{BackgroundColors.FAIL}[Error] {exp} at {fullpath}{BackgroundColors.ENDC}"
+                )
 
 
 def year_fix(text: str) -> str:
-    """ Update year in the title if it exists """
+    """Update year in the title if it exists"""
     text = remove_unwanted_chars(text)
-    parsed_name = re.split(r'([12][90]\d{2})', text)
+    parsed_name = re.split(r"([12][90]\d{2})", text)
 
     if len(parsed_name) > 1:
         title, year, *_ = parsed_name
-        title = re.split(r'[\(\[\{\<]', title)
-        title = ''.join(title)
-        return f'{title}({year})'
+        title = re.split(r"[\(\[\{\<]", title)
+        title = "".join(title)
+        return f"{title}({year})"
     return parsed_name[0]
 
 
 def blacklist_word_fix(text: str) -> str:
-    """ Remove any blacklisted keywords after adding the year """
+    """Remove any blacklisted keywords after adding the year"""
     for keyword in BLACKLIST:
         if keyword in text.lower():
-            temp = re.split(keyword, text)
-            text = temp[0]
+            text = re.split(keyword, text)[0]
     return text
 
 
 def main():
-    """ Main function """
+    """Main function"""
 
-    print(f"{BackgroundColors.OKCYAN}Running script under DRY RUN. Turn this off by setting `IS_DRY_RUN` flag to {IS_DRY_RUN} under {TARGET_DIR} directory.{BackgroundColors.ENDC}")
+    print(
+        f"{BackgroundColors.OKCYAN}Running script under DRY RUN.Turn this off by setting `IS_DRY_RUN` flag to",
+        "{IS_DRY_RUN} under {TARGET_DIR} directory.{BackgroundColors.ENDC}",
+    )
 
     # Meat and potatoes
     get_all_files(TARGET_DIR)
 
-    print(f"{BackgroundColors.OKCYAN}Completed running the script.{BackgroundColors.ENDC}")
+    print(
+        f"{BackgroundColors.OKCYAN}Completed running the script.{BackgroundColors.ENDC}"
+    )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
