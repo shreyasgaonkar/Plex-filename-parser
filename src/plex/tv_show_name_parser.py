@@ -16,22 +16,20 @@ TARGET_DIR = "/path/to/tvshows/directory"
 
 def get_season_and_episode(file_name: str, file_path: str) -> List[Union[str, Any]]:
     # Check if file name contains SXXEXX format, if so rename as Plex requires
-    season_and_episode = re.split(r'([Ss]\d{,2}[Ee]\d{,2})', file_name)
+    season_and_episode = re.split(r'([S]\d{,2}[E]\d{,2})', file_name, re.IGNORECASE)
+    season_and_episode = list(filter(None, season_and_episode))  # Remove empty vals
+
+    # sXXeXX should be lowercase
+    season_and_episode = [i.lower() if i.startswith("S") else capitalize_title(i)
+                          for i in season_and_episode]
 
     season_and_episode = [i.replace("-", "").strip()
                           for i in season_and_episode]
 
-    # sXXeXX should be lowercase
-    season_and_episode = [i.lower() if i.startswith("S") else i
-                          for i in season_and_episode]
-
     # Here sXXeXX can be either at 1st or 2nd position in the array.
     # If this is at first, get season from parent. If at second, don't change
-    if re.findall(r'([Ss]\d{,2}[Ee]\d{,2})', season_and_episode[0]):
+    if re.findall(r'([S]\d{,2}[E]\d{,2})', season_and_episode[0], re.IGNORECASE):
         season_and_episode.insert(0, file_path.split("/")[-1])
-
-    # Remove empty vals
-    season_and_episode = [x for x in season_and_episode if x]
 
     return season_and_episode
 

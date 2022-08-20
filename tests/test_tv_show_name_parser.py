@@ -1,46 +1,88 @@
-from plex.tv_show_name_parser import capitalize_title, blacklist_word_fix, remove_unwanted_chars, roman_char_fix
+from plex.tv_show_name_parser import (
+    capitalize_title,
+    blacklist_word_fix,
+    remove_unwanted_chars,
+    roman_char_fix,
+)
 
 # Define the test string as the key, and value as another key-value with key being the method against the original string, and the value is the target result
 test_dict = {
-    "VeNom": {
-        "capitalize_title": (capitalize_title, "Venom"),
-        "blacklist_word_fix": (blacklist_word_fix, "VeNom"),
-        "remove_unwanted_chars": (remove_unwanted_chars, "VeNom"),
-        "roman_char_fix": (roman_char_fix, "VeNom")
+    "The.Secret.Circle.S01E19": {
+        "capitalize_title": (capitalize_title, "The Secret Circle S01e19"),
+        "blacklist_word_fix": (blacklist_word_fix, "The Secret Circle S01E19"),
+        "remove_unwanted_chars": (remove_unwanted_chars, "The Secret Circle S01E19"),
+        "roman_char_fix": (roman_char_fix, "The Secret Circle S01E19"),
     },
-    "grey'S anatomy": {
-        "capitalize_title": (capitalize_title, "Grey's Anatomy"),
-        "blacklist_word_fix": (blacklist_word_fix, "grey'S anatomy"),
-        "remove_unwanted_chars": (remove_unwanted_chars, "grey'S anatomy"),
-        "roman_char_fix": (roman_char_fix, "grey'S anatomy")
+    "Fargo S01E07 HDTV x264 AAC E-Subs [GWC]": {
+        "capitalize_title": (
+            capitalize_title,
+            "Fargo S01e07 Hdtv X264 Aac E-subs [gwc]",
+        ),
+        "blacklist_word_fix": (
+            blacklist_word_fix,
+            "Fargo S01E07 AAC E-Subs [GWC]",
+        ),
+        "remove_unwanted_chars": (
+            remove_unwanted_chars,
+            "Fargo S01E07 HDTV x264 AAC E-Subs [GWC]",
+        ),
+        "roman_char_fix": (roman_char_fix, "Fargo S01E07 HDTV x264 AAC E-Subs [GWC]"),
     },
-    "rise.of.the.planet.of.the.apes.iii.2015": {
-        "capitalize_title": (capitalize_title, "Rise Of The Planet Of The Apes Iii 2015"),
-        "blacklist_word_fix": (blacklist_word_fix, "rise of the planet of the apes iii 2015"),
-        "remove_unwanted_chars": (remove_unwanted_chars, "rise of the planet of the apes iii 2015"),
-        "roman_char_fix": (roman_char_fix, "rise of the planet of the apes III 2015")
+    "Supernatural S1E08 - Bugs": {
+        "capitalize_title": (capitalize_title, "Supernatural S1e08 - Bugs"),
+        "blacklist_word_fix": (blacklist_word_fix, "Supernatural S1E08 - Bugs"),
+        "remove_unwanted_chars": (remove_unwanted_chars, "Supernatural S1E08 - Bugs"),
+        "roman_char_fix": (roman_char_fix, "Supernatural S1E08 - Bugs"),
     },
-    "harry potter and the half blood prince dvdrip 2006": {
-        "capitalize_title": (capitalize_title, "Harry Potter And The Half Blood Prince Dvdrip 2006"),
-        "blacklist_word_fix": (blacklist_word_fix, "harry potter and the half blood prince 2006"),
-        "remove_unwanted_chars": (remove_unwanted_chars, "harry potter and the half blood prince dvdrip 2006"),
-        "roman_char_fix": (roman_char_fix, "harry potter and the half blood prince dvdrip 2006")
-    },
-    "Batman%20Begins   (2005)": {
-        "capitalize_title": (capitalize_title, "Batman%20begins (2005)"),
-        "blacklist_word_fix": (blacklist_word_fix, "Batman%20Begins   (2005)"),
-        "remove_unwanted_chars": (remove_unwanted_chars, "Batman Begins (2005)"),
-        "roman_char_fix": (roman_char_fix, "Batman%20Begins   (2005)")
+    "Silicon.Valley.S03E09.720p.HDTV.275MB.GoenWae": {
+        "capitalize_title": (
+            capitalize_title,
+            "Silicon Valley S03e09 720p Hdtv 275mb Goenwae",
+        ),
+        "blacklist_word_fix": (
+            blacklist_word_fix,
+            "Silicon Valley S03E09 275MB GoenWae",
+        ),
+        "remove_unwanted_chars": (
+            remove_unwanted_chars,
+            "Silicon Valley S03E09 720p HDTV 275MB GoenWae",
+        ),
+        "roman_char_fix": (
+            roman_char_fix,
+            "Silicon Valley S03E09 720p HDTV 275MB GoenWae",
+        ),
     },
 }
 
 
+def append_optional_params(input_string: str, optional_params: list) -> list:
+    return [input_string] + optional_params
+
+
 def generic_test_function(function_name: str) -> None:
+    """
+
+    Dict created with key as the input string to be tested,
+    value as another dict with API name and the target string.
+
+    Nested dict structure:
+        - key (string): API method to be called
+        - value (two valued tuple):
+            - first: API name (again)
+            - second: expected return string from the API
+    """
+
     for key, value in test_dict.items():
-        test_string = key
-        method = value[function_name][0]
-        target_string = value[function_name][1]
-        assert method(test_string) == target_string
+        input_string = key
+        method, target_string, *optional_params = value[function_name]
+
+        # Certain function may have more than one params, append and assert
+        if optional_params:
+            params = append_optional_params(input_string, optional_params)
+            assert method(*params) == target_string
+        else:
+            params = input_string
+            assert method(params) == target_string
 
 
 def test_all():
@@ -48,4 +90,4 @@ def test_all():
     # Get all testnames
     all_tests = test_dict[next(iter(test_dict))].keys()
     for test in all_tests:
-        generic_test_function(f"{test}")
+        generic_test_function(test)

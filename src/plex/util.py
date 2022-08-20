@@ -1,8 +1,28 @@
 import re
 import string
 
-BLACKLIST = {"1080p", "1080", "blu ray", "bluray", "blu-ray", "4k",
-             "720p", "720", "dvdrip", "dvd", "brrip", "h264", "h265", "mp4"}
+BLACKLIST = {
+    "1080p",
+    "1080",
+    "blu ray",
+    "bluray",
+    "blu-ray",
+    "4k",
+    "720p",
+    "720",
+    "480",
+    "480p",
+    "webdl",
+    "dvdrip",
+    "dvd",
+    "brrip",
+    "h264",
+    "h265",
+    "mp4",
+    "hdtv",
+    "x264",
+    "hdtvrip",
+}
 ROMAN = {"i", "ii", "iii", "iv", "iiii", "v", "vi", "vii", "viii", "ix", "x"}
 
 
@@ -47,7 +67,7 @@ def blacklist_word_fix(text: str) -> str:
 
 def remove_unwanted_chars(text: str) -> str:
     """Replace '.' & '%20' and any whitespaces"""
-    text = text.replace(".", " ").replace("-", " ").replace("%20", " ").strip()
+    text = text.replace(".", " ").replace("%20", " ").strip()
     text = re.sub(r"\s+", " ", text)
     return text
 
@@ -59,7 +79,7 @@ def capitalize_title(text: str) -> str:
 
 
 def remove_whitespaces(text: str) -> str:
-    """ Remove extra whitespace and capitalize title """
-    text = re.sub(r'\s+', ' ', text)
+    """Remove extra whitespace and capitalize title"""
+    text = re.sub(r"\s+", " ", text)
     text = capitalize_title(text)
     return text
