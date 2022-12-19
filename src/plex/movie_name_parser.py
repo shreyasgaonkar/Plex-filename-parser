@@ -16,7 +16,7 @@ from plex.util import (
 TARGET_DIR = "/path/to/movies/directory"
 
 # Change this to False when ready to rename the files/directories
-IS_DRY_RUN = False
+IS_DRY_RUN = True
 
 
 """
@@ -24,6 +24,21 @@ IS_DRY_RUN = False
 2. Get individual files
 3. Parse files and directory name
 """
+
+
+def print_info(message):
+    print(f"{BackgroundColors.OKCYAN}{message}{BackgroundColors.ENDC}")
+
+
+def print_success(message):
+    print(f"{BackgroundColors.OKGREEN}{message}{BackgroundColors.ENDC}")
+
+
+def chain(start, *funcs):
+    res = start
+    for func in funcs:
+        res = func(res)
+    return res
 
 
 def get_all_files(target_dir: str) -> None:
@@ -48,14 +63,7 @@ def clean_directory(path_name: str, dir_name: str) -> None:
     """
 
     original_dir_name = dir_name
-    dir_name = dir_name.strip()
-
-    dir_name = capitalize_title(dir_name)
-    dir_name = remove_unwanted_chars(dir_name)
-    dir_name = year_fix(dir_name)
-    dir_name = blacklist_word_fix(dir_name)
-    dir_name = remove_whitespaces(dir_name)
-    dir_name = roman_char_fix(dir_name)
+    dir_name = chain(dir_name, str.strip, capitalize_title, remove_unwanted_chars, year_fix, blacklist_word_fix, remove_whitespaces, roman_char_fix)
 
     # Replace if any changes
     if dir_name != original_dir_name and not IS_DRY_RUN:
@@ -72,9 +80,7 @@ def clean_directory(path_name: str, dir_name: str) -> None:
                 )
                 handle_directory_exists_error(dir_name, original_dir_name, path_name)
         else:
-            print(
-                f"{BackgroundColors.OKGREEN}Renamed dir: {original_dir_name} -> {dir_name}{BackgroundColors.ENDC}"
-            )
+            print_success(f"Renamed dir: {original_dir_name} -> {dir_name}")
 
 
 def handle_directory_exists_error(dir_name, original_dir_name, path_name):
@@ -90,9 +96,7 @@ def handle_directory_exists_error(dir_name, original_dir_name, path_name):
                 os.makedirs(new_path)
 
             shutil.move(os.path.join(path, file), os.path.join(new_path, file))
-            print(
-                f"{BackgroundColors.OKGREEN}Moved the file from {original_dir_name} to {dir_name}{dir_name}{BackgroundColors.ENDC}"
-            )
+            print_success(f"Moved the file from {original_dir_name} to {dir_name}{dir_name}")
 
     print(
         f"{BackgroundColors.OKBLUE}Removing dir: {path_name}/{original_dir_name}{BackgroundColors.ENDC}"
@@ -118,14 +122,15 @@ def clean_file(path_name: str, file_name: str) -> None:
     file_ext = os.path.splitext(file_name)[1][1:]
 
     remove_empty_files(path_name)
-    file_name = capitalize_title(file_name)
-    file_name = remove_unwanted_chars(file_name)
-    file_name = year_fix(file_name)
-    file_name = blacklist_word_fix(file_name)
-    file_name = remove_whitespaces(file_name)
-    file_name = roman_char_fix(file_name)
+    file_name = chain(file_name, capitalize_title, remove_unwanted_chars, year_fix, blacklist_word_fix, remove_whitespaces, roman_char_fix)
     file_name = remove_duplicate_file_ext(file_name, file_ext)
     file_name = f"{file_name}.{file_ext}"
+
+    # Remove unwanted files
+    if file_ext in {"meta"}:
+        print(f"Removed file: {original_file_name}")
+        os.remove(os.path.join(path_name, original_file_name))
+        return
 
     # Rename the files
     if file_name != original_file_name and not IS_DRY_RUN:
@@ -180,17 +185,13 @@ def blacklist_word_fix(text: str) -> str:
 def main():
     """Main function"""
 
-    print(
-        f"{BackgroundColors.OKCYAN}Running script under DRY RUN.Turn this off by setting `IS_DRY_RUN` flag to",
-        "{IS_DRY_RUN} under {TARGET_DIR} directory.{BackgroundColors.ENDC}",
-    )
+    if IS_DRY_RUN:
+        print_info(
+            f"⚠️ Running script under DRY RUN.Turn this off by setting `IS_DRY_RUN` flag to {IS_DRY_RUN} under {TARGET_DIR} directory.")
 
-    # Meat and potatoes
     get_all_files(TARGET_DIR)
 
-    print(
-        f"{BackgroundColors.OKCYAN}Completed running the script.{BackgroundColors.ENDC}"
-    )
+    print_info("Completed running the script.")
 
 
 if __name__ == "__main__":
